@@ -7,6 +7,17 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+     public function test1()
+    {
+        return redirect()->route('admin.home');
+    }
+
+    // Redirect bằng URL hardcode
+    public function test2()
+    {
+        return redirect('/admin/dashboard');
+    }
+    
     /**
      * Display a listing of the resource.
      */
