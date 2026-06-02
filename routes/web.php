@@ -24,7 +24,7 @@ Route::get('/demo5/{id?}', [DemoController::class, 'index5']);
 Route::get('/demo6/{parram1}/{parram2}', [DemoController::class, 'index6']);
 
 Route::prefix('admin')->group(function () {
-    Route::resource('category', CategoryController::class);
+    Route::resource('categories', CategoryController::class);
 });
 Route::resource('admin/brand', BrandController::class);
 Route::resource('admin/product', ProductController::class);

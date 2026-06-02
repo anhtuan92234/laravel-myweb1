@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 return new class extends Migration
 {
     /**
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->string('fullname', 100);
             $table->string('username', 30)->unique();
             $table->string('email', 50)->unique();
-            $table->string('password', 50);
+            $table->string('password', 150);
             $table->string('phone', 20)->unique();
             $table->string('address', 255)->nullable();
             $table->tinyInteger('gender')->default(0);

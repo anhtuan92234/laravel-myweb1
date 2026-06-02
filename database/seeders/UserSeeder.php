@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
+
 class UserSeeder extends Seeder
 {
     /**
@@ -18,7 +19,7 @@ class UserSeeder extends Seeder
             'fullname'   => 'Nguyễn Anh Admin',
             'username'   => 'admin',
             'email'      => 'admin@gmail.com',
-            'password'   => md5('123456'), // Mã hóa MD5 (32 ký tự), mật khẩu là: 123456
+            'password'   => bcrypt('123456'), // mật khẩu là: 123456
             'phone'      => '0912345678',
             'address'    => '123 Đường Tô Ký, Quận 12, TP.HCM',
             'gender'     => 1, // Nam
