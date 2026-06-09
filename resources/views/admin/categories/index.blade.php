@@ -63,4 +63,9 @@
     @endforeach
 </tbody>
 </table>
+
+<!-- {{-- Hiển thị thanh điều hướng phân trang và căn giữa --}} -->
+<div class="d-flex justify-content-center">
+    {{ $list->links() }}
+</div>
 @endsection
