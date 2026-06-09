@@ -23,18 +23,16 @@ Route::get('/demo4/{id}', [DemoController::class, 'index4']);
 Route::get('/demo5/{id?}', [DemoController::class, 'index5']);
 Route::get('/demo6/{parram1}/{parram2}', [DemoController::class, 'index6']);
 
-Route::prefix('admin')->group(function () {
+// Route::get('/test1', [ProductController::class, 'test1']);
+// Route::get('/test2', [ProductController::class, 'test2']);
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('home');
     Route::resource('categories', CategoryController::class);
+    Route::resource('brands', BrandController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('posts', PostController::class);
 });
-Route::resource('admin/brand', BrandController::class);
-Route::resource('admin/product', ProductController::class);
-Route::resource('admin/user', UserController::class);
-Route::resource('admin/post', PostController::class);
-
-Route::get('/test1', [ProductController::class, 'test1']);
-Route::get('/test2', [ProductController::class, 'test2']);
-// Route::resource('admin/category', CategoryController::class);
-
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.home');

@@ -18,19 +18,24 @@ class CategoryController extends Controller
         ->where('status', 1)
         ->orderBy('catename', 'asc')
         ->get();
-
-    // Trả dữ liệu về giao diện tương ứng và truyền biến $list sang
     return view('admin.categories.index', compact('list'));
     }
 
     public function create()
     {
-        return "Form thêm category";
+        return view('admin.categories.create');
     }
 
     public function store(Request $request)
     {
-        return "Lưu category";
+        DB::table('categories')->insert([
+            'catename' => $request->catename,
+            'slug'     => $request->slug,    
+            'status'   => 1,   // Đặt trạng thái mặc định là Hiển thị
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        return redirect()->route('admin.categories.index');
     }
 
     public function show(string $id)
@@ -50,6 +55,10 @@ class CategoryController extends Controller
 
     public function destroy(string $id)
     {
-        return "Xóa category ID: " . $id;
+        DB::table('categories')
+        ->where('cateid', $id)
+        ->delete();
+        
+        return redirect()->route('admin.categories.index');
     }
 }

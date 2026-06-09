@@ -4,26 +4,44 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
-     public function test1()
-    {
-        return redirect()->route('admin.home');
-    }
+    //  public function test1()
+    // {
+    //     return redirect()->route('admin.home');
+    // }
 
-    // Redirect bằng URL hardcode
-    public function test2()
-    {
-        return redirect('/admin/dashboard');
-    }
+    // // Redirect bằng URL hardcode
+    // public function test2()
+    // {
+    //     return redirect('/admin/dashboard');
+    // }
     
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $list = DB::table('products')
+            ->join('categories', 'products.cateid', '=', 'categories.cateid') // Dựa trên migration Categories cũ của bạn
+            ->leftJoin('brands', 'products.brandid', '=', 'brands.id')       // Khóa ngoại brandid kết nối với id của bảng brands
+            ->select(
+                'products.id',
+                'products.productname',
+                'products.slug',
+                'products.price',
+                'products.pricediscount',
+                'products.image',
+                'products.status',
+                'categories.catename',   // Lấy tên loại thay vì lấy ID số
+                'brands.brandname'       // Lấy tên thương hiệu thay vì lấy ID số
+            )
+            ->orderBy('products.productname', 'asc')
+            ->get();
+
+        return view('admin.products.index', compact('list'));
     }
 
     /**

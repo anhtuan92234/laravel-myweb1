@@ -25,10 +25,35 @@
                             Loại Sản phẩm
                         </a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">
                             Thêm loại sản phẩm</a>
                         </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.brands.index') }}">
+                            Thương hiệu
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.users.index') }}">
+                            Quản lý thành viên
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.products.index') }}">
+                            <i class="bi bi-box-seam"></i> Sản phẩm
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.posts.index') }}">
+                            <i class="bi bi-journal-text"></i> Bài viết / Tin tức
+                        </a>
+                    </li>
                     </ul>
                 </div>
             </li>
