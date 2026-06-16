@@ -18,29 +18,32 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($list as $item)
-        <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td><strong>{{ $item->fullname }}</strong></td>
-            <td>{{ $item->username }}</td>
-            <td>{{ $item->email }}</td>
-            <td>{{ $item->phone }}</td>
-            <td>
-                @if($item->role == 1)
-                    <span class="badge bg-primary">Quản lý</span>
-                @else
-                    <span class="badge bg-info text-dark">Nhân viên</span>
-                @endif
-            </td>
-            <td>
-                @if($item->status == 1)
-                    <span class="badge bg-success">Kích hoạt</span>
-                @else
-                    <span class="badge bg-secondary">Khóa</span>
-                @endif
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
+    @foreach($list as $item)
+    <tr>
+        <td>{{ $loop->iteration }}</td>
+        <td><strong>{{ $item->fullname }}</strong></td>
+        <td>{{ $item->username }}</td>
+        <td>{{ $item->email }}</td>
+        <td>{{ $item->phone }}</td>
+        <td>
+            @if($item->role == 1)
+                <span class="badge bg-primary">Quản lý</span>
+            @else
+                <span class="badge bg-info text-dark">Nhân viên</span>
+            @endif
+        </td>
+        <td>
+            @if($item->status == 1)
+                <span class="badge bg-success">Kích hoạt</span>
+            @else
+                <span class="badge bg-secondary">Khóa</span>
+            @endif
+        </td>
+    </tr>
+    @endforeach
+</tbody>
 </table>
+<div class="d-flex justify-content-center mt-3">
+    {{ $list->links() }}
+</div>
 @endsection

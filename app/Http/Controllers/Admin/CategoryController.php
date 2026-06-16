@@ -35,14 +35,23 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        DB::table('categories')->insert([
-            'catename' => $request->catename,
-            'slug'     => $request->slug,    
-            'status'   => 1,   // Đặt trạng thái mặc định là Hiển thị
-            'created_at' => now(),
-            'updated_at' => now(),
+        // DB::table('categories')->insert([
+        //     'catename' => $request->catename,
+        //     'slug'     => $request->slug,    
+        //     'status'   => 1,   // Đặt trạng thái mặc định là Hiển thị
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ]);
+        // return redirect()->route('admin.categories.index');
+
+        Category::create([
+            'catename'    => $request->catename,
+            'slug'        => $request->slug,    
+            'description' => $request->description,
+            'status'      => $request->status ?? 1,
         ]);
-        return redirect()->route('admin.categories.index');
+
+        return redirect()->route('admin.categories.index')->with('success', 'Thêm danh mục mới thành công!');
     }
 
     public function show(string $id)
@@ -62,10 +71,14 @@ class CategoryController extends Controller
 
     public function destroy(string $id)
     {
-        DB::table('categories')
-        ->where('cateid', $id)
-        ->delete();
+        // DB::table('categories')
+        // ->where('cateid', $id)
+        // ->delete();
         
-        return redirect()->route('admin.categories.index');
+        // return redirect()->route('admin.categories.index');
+
+        Category::where('cateid', $id)->delete();
+        
+        return redirect()->route('admin.categories.index')->with('success', 'Xóa danh mục thành công!');
     }
 }

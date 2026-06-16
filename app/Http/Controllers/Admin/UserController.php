@@ -5,18 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($limit = 10)
     {
-        $list = DB::table('users')
-            ->select('id', 'fullname', 'username', 'email', 'phone', 'role', 'status')
-            ->orderBy('id', 'desc')
-            ->get();
+        // $list = DB::table('users')
+        //     ->select('id', 'fullname', 'username', 'email', 'phone', 'role', 'status')
+        //     ->orderBy('id', 'desc')
+        //     ->get();
+
+        $list = User::orderBy('id', 'desc')
+        ->paginate($limit);
 
         return view('admin.users.index', compact('list'));
     }

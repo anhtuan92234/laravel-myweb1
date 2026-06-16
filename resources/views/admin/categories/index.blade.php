@@ -11,8 +11,6 @@
     </a>
 </div>
 
-<table class="table table-bordered table-hover table-striped"></table>
-
 <table class="table table-bordered table-hover table-striped align-middle">
     <thead class="table-dark">
         <tr>
@@ -22,23 +20,35 @@
             <th>Tên loại</th>
             <th>Slug</th>
             <th>Trạng thái</th>
-            <th>Chức năng</th> </tr>
+            <th width="120">Chức năng</th>
         </tr>
     </thead>
+
     <tbody>
-        @foreach($list as $item)
+        @forelse($list as $item)
         <tr>
-        <td>{{ $loop->iteration }}</td>
+            <td>{{ $loop->iteration }}</td>
+
             <td>
                 @if(!empty($item->image) && file_exists(public_path('uploads/categories/' . $item->image)))
-                    <img src="{{ asset('uploads/categories/' . $item->image) }}" alt="{{ $item->catename }}" width="80" class="img-thumbnail">
+                    <img
+                        src="{{ asset('uploads/categories/' . $item->image) }}"
+                        alt="{{ $item->catename }}"
+                        width="80"
+                        class="img-thumbnail">
                 @else
-                    <img src="{{ asset('images/default.png') }}" alt="Default" width="80" class="img-thumbnail">
+                    <img
+                        src="{{ asset('images/default.png') }}"
+                        alt="Default"
+                        width="80"
+                        class="img-thumbnail">
                 @endif
             </td>
+
             <td>{{ $item->cateid }}</td>
             <td>{{ $item->catename }}</td>
             <td>{{ $item->slug }}</td>
+
             <td>
                 @if($item->status == 1)
                     <span class="badge bg-success">Hiển thị</span>
@@ -46,26 +56,44 @@
                     <span class="badge bg-danger">Ẩn</span>
                 @endif
             </td>
-            
+
             <td>
-                <form action="{{ route('admin.categories.destroy', $item->cateid) }}" 
-                method="POST" 
-                onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này không?');">
-                @csrf
-                @method('DELETE')
-                
-                <button type="submit" class="btn btn-danger btn-sm">
-                    <i class="bi bi-trash"></i> Xóa
-                </button>
-            </form>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
+                <div class="d-flex gap-1">
+
+                    <a href="{{ route('admin.categories.edit', $item->cateid) }}"
+                        class="btn btn-warning btn-sm">
+                        Sửa
+                    </a>
+
+                    <form action="{{ route('admin.categories.destroy', $item->cateid) }}"
+                        method="POST"
+                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này không?');">
+
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            Xóa
+                        </button>
+                    </form>
+
+                </div>
+            </td>
+        </tr>
+
+        @empty
+        <tr>
+            <td colspan="7" class="text-center text-danger">
+                Chưa có dữ liệu loại sản phẩm
+            </td>
+        </tr>
+        @endforelse
+    </tbody>
 </table>
 
-<!-- {{-- Hiển thị thanh điều hướng phân trang và căn giữa --}} -->
+{{-- Phân trang --}}
 <div class="d-flex justify-content-center">
     {{ $list->links() }}
 </div>
+
 @endsection

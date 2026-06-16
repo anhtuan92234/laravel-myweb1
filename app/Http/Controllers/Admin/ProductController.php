@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -22,24 +23,42 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($limit = 10)
     {
-        $list = DB::table('products')
-            ->join('categories', 'products.cateid', '=', 'categories.cateid') // Dựa trên migration Categories cũ của bạn
-            ->leftJoin('brands', 'products.brandid', '=', 'brands.id')       // Khóa ngoại brandid kết nối với id của bảng brands
-            ->select(
-                'products.id',
-                'products.productname',
-                'products.slug',
-                'products.price',
-                'products.pricediscount',
-                'products.image',
-                'products.status',
-                'categories.catename',   // Lấy tên loại thay vì lấy ID số
-                'brands.brandname'       // Lấy tên thương hiệu thay vì lấy ID số
-            )
-            ->orderBy('products.productname', 'asc')
-            ->get();
+        // $list = DB::table('products')
+        //     ->join('categories', 'products.cateid', '=', 'categories.cateid') // Dựa trên migration Categories cũ của bạn
+        //     ->leftJoin('brands', 'products.brandid', '=', 'brands.id')       // Khóa ngoại brandid kết nối với id của bảng brands
+        //     ->select(
+        //         'products.id',
+        //         'products.productname',
+        //         'products.slug',
+        //         'products.price',
+        //         'products.pricediscount',
+        //         'products.image',
+        //         'products.status',
+        //         'categories.catename',   // Lấy tên loại thay vì lấy ID số
+        //         'brands.brandname'       // Lấy tên thương hiệu thay vì lấy ID số
+        //     )
+        //     ->orderBy('products.productname', 'asc')
+        //     ->get();
+
+        $list = Product::with([
+            'category:cateid,catename', // Chỉ định nạp các cột cần thiết từ bảng categories
+            'brand:id,brandname'        // Chỉ định nạp các cột cần thiết từ bảng brands
+        ])
+        ->select(
+            'id',
+            'productname',
+            'slug',
+            'price',
+            'pricediscount',
+            'image',
+            'status',
+            'cateid',   // Giữ lại khóa ngoại để Eloquent khớp quan hệ của Category
+            'brandid'   // Giữ lại khóa ngoại để Eloquent khớp quan hệ của Brand
+        )
+        ->orderBy('productname', 'asc')
+        ->paginate($limit);
 
         return view('admin.products.index', compact('list'));
     }
@@ -57,7 +76,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return view('admin.products.create');
     }
 
     /**

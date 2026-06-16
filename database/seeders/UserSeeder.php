@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 
 class UserSeeder extends Seeder
@@ -15,28 +16,32 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->insert([
-            'fullname'   => 'Nguyễn Anh Admin',
-            'username'   => 'admin',
-            'email'      => 'admin@gmail.com',
-            'password'   => bcrypt('123456'), // mật khẩu là: 123456
-            'phone'      => '0912345678',
-            'address'    => '123 Đường Tô Ký, Quận 12, TP.HCM',
-            'gender'     => 1, // Nam
-            'birthday'   => '2000-01-01',
-            'role'       => 1, // 1: Quản lý
-            'status'     => 1,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        $faker = Faker::create();
+
+        DB::table('users')->updateOrInsert(
+            ['username' => 'admin'],
+            [
+                'fullname'   => 'Nguyễn Anh Admin',
+                'email'      => 'admin@gmail.com',
+                'password'   => bcrypt('123456'),
+                'phone'      => '0912345678',
+                'address'    => '123 Đường Tô Ký, Quận 12, TP.HCM',
+                'gender'     => 1,
+                'birthday'   => '2000-01-01',
+                'role'       => 1,
+                'status'     => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        );
 
         // 2. Tạo thêm 9 tài khoản nhân viên/người dùng ngẫu nhiên bằng Faker
-        for ($i = 1; $i <= 9; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
             DB::table('users')->insert([
                 'fullname'   => fake()->name(),
-                'username'   => fake()->unique()->userName(),
-                'email'      => fake()->unique()->safeEmail(),
-                'password'   => md5('password'), // Mật khẩu chung là: password
+                'username'   => 'user' . $i,
+                'email'      => 'user' . $i . '@gmail.com',
+                'password'   => bcrypt('password'), // Mật khẩu chung là: password
                 'phone'      => Str::limit(fake()->unique()->phoneNumber(), 20, ''),
                 'address'    => fake()->address(),
                 'gender'     => fake()->numberBetween(0, 1), // 0: Nữ, 1: Nam
