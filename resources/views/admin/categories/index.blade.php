@@ -25,11 +25,11 @@
     </thead>
 
     <tbody>
-        @forelse($list as $item)
+    @forelse($list as $item)
         <tr>
-            <td>{{ $loop->iteration }}</td>
+            <td class="text-center">{{ $list->firstItem() + $loop->index }}</td>
 
-            <td>
+            <td class="text-center">
                 @if(!empty($item->image) && file_exists(public_path('uploads/categories/' . $item->image)))
                     <img
                         src="{{ asset('uploads/categories/' . $item->image) }}"
@@ -45,11 +45,11 @@
                 @endif
             </td>
 
-            <td>{{ $item->cateid }}</td>
-            <td>{{ $item->catename }}</td>
+            <td class="text-center fw-bold">{{ $item->cateid }}</td>
+            <td><strong>{{ $item->catename }}</strong></td>
             <td>{{ $item->slug }}</td>
 
-            <td>
+            <td class="text-center">
                 @if($item->status == 1)
                     <span class="badge bg-success">Hiển thị</span>
                 @else
@@ -57,12 +57,12 @@
                 @endif
             </td>
 
-            <td>
-                <div class="d-flex gap-1">
+            <td class="text-center">
+                <div class="d-flex justify-content-center gap-1">
 
                     <a href="{{ route('admin.categories.edit', $item->cateid) }}"
                         class="btn btn-warning btn-sm">
-                        Sửa
+                        <i class="bi bi-pencil-square"></i> Sửa
                     </a>
 
                     <form action="{{ route('admin.categories.destroy', $item->cateid) }}"
@@ -73,7 +73,7 @@
                         @method('DELETE')
 
                         <button type="submit" class="btn btn-danger btn-sm">
-                            Xóa
+                            <i class="bi bi-trash"></i> Xóa
                         </button>
                     </form>
 
@@ -83,7 +83,7 @@
 
         @empty
         <tr>
-            <td colspan="7" class="text-center text-danger">
+            <td colspan="7" class="text-center text-danger py-4">
                 Chưa có dữ liệu loại sản phẩm
             </td>
         </tr>

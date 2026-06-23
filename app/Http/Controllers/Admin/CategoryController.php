@@ -44,6 +44,14 @@ class CategoryController extends Controller
         // ]);
         // return redirect()->route('admin.categories.index');
 
+        $request->validate([
+            'catename' => 'required|max:255',
+            'slug'     => 'required|max:255',
+        ], [
+            'catename.required' => 'Vui lòng nhập tên loại sản phẩm!',
+            'slug.required'     => 'Vui lòng nhập danh mục slug!',
+        ]);
+
         Category::create([
             'catename'    => $request->catename,
             'slug'        => $request->slug,    
@@ -56,17 +64,35 @@ class CategoryController extends Controller
 
     public function show(string $id)
     {
-        return "Chi tiết category ID: " . $id;
+        $category = Category::findOrFail($id);
+        return view('admin.categories.show', compact('category'));
     }
 
     public function edit(string $id)
     {
-        return "Form sửa category ID: " . $id;
+        $category = Category::findOrFail($id);
+        return view('admin.categories.edit', compact('category'));
     }
 
     public function update(Request $request, string $id)
     {
-        return "Cập nhật category ID: " . $id;
+        $request->validate([
+            'catename' => 'required|max:255',
+            'slug'     => 'required|max:255',
+        ], [
+            'catename.required' => 'Vui lòng nhập tên loại sản phẩm!',
+            'slug.required'     => 'Vui lòng nhập danh mục slug!',
+        ]);
+
+        $category = Category::findOrFail($id);
+        $category->update([
+            'catename'    => $request->catename,
+            'slug'        => $request->slug,
+            'description' => $request->description,
+            'status'      => $request->status,
+        ]);
+
+        return redirect()->route('admin.categories.index')->with('success', 'Cập nhật danh mục thành công!');
     }
 
     public function destroy(string $id)
@@ -77,7 +103,8 @@ class CategoryController extends Controller
         
         // return redirect()->route('admin.categories.index');
 
-        Category::where('cateid', $id)->delete();
+        $category = Category::findOrFail($id);
+        $category->delete();
         
         return redirect()->route('admin.categories.index')->with('success', 'Xóa danh mục thành công!');
     }
