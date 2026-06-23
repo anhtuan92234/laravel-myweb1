@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
+use App\Models\Category;
+use App\Models\Brand;
 
 class ProductController extends Controller
 {
@@ -54,6 +56,7 @@ class ProductController extends Controller
             'pricediscount',
             'image',
             'status',
+            'description',
             'cateid',   // Giữ lại khóa ngoại để Eloquent khớp quan hệ của Category
             'brandid'   // Giữ lại khóa ngoại để Eloquent khớp quan hệ của Brand
         )
@@ -68,7 +71,10 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::select('cateid', 'catename')->orderBy('catename', 'asc')->get();
+        $brands = Brand::select('id', 'brandname')->orderBy('brandname', 'asc')->get();
+        
+        return view('admin.products.create', compact('categories', 'brands'));
     }
 
     /**
@@ -76,7 +82,35 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        return view('admin.products.create');
+        try {
+
+            if (empty($request->cateid)) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Vui lòng chọn loại sản phẩm');
+            }
+
+            Product::create([
+                'productname' => $request->productname,
+                'slug' => $request->slug,
+                'cateid' => $request->cateid,
+                'brandid' => $request->brandid,
+                'price' => $request->price,
+                'pricediscount' => $request->pricediscount ?? 0,
+                'status' => $request->status,
+                'description' => $request->description
+            ]);
+
+            return redirect()
+                ->route('admin.products.index')
+                ->with('success', 'Thêm sản phẩm thành công');
+
+        } catch (\Exception $e) {
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -92,7 +126,16 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::find($id);
+        
+        if (!$product) {
+            return redirect()->route('admin.products.index')->with('error', 'Sản phẩm không tồn tại');
+        }
+
+        $categories = Category::select('cateid', 'catename')->orderBy('catename', 'asc')->get();
+        $brands = Brand::select('id', 'brandname')->orderBy('brandname', 'asc')->get();
+        
+        return view('admin.products.edit', compact('product', 'categories', 'brands'));
     }
 
     /**
@@ -100,7 +143,37 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            if (empty($request->cateid)) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Vui lòng chọn loại sản phẩm');
+            }
+
+            $product = Product::find($id);
+            if (!$product) {
+                return redirect()
+                    ->route('admin.products.index')
+                    ->with('error', 'Sản phẩm không tồn tại');
+            }
+
+            $product->update([
+                'productname' => $request->productname,
+                'slug' => $request->slug,
+                'cateid' => $request->cateid,
+                'brandid' => $request->brandid,
+                'price' => $request->price,
+                'pricediscount' => $request->pricediscount,
+                'status' => $request->status,
+                'description' => $request->description
+            ]);
+
+            return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     /**
