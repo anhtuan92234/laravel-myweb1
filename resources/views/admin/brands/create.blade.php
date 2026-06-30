@@ -5,6 +5,12 @@
 @section('content')
 <div class="container-fluid fs-5">
     <h2 class="mb-4">THÊM MỚI THƯƠNG HIỆU</h2>
+    
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
 
     <div class="card shadow-sm col-md-8">
         <div class="card-body">
@@ -13,17 +19,17 @@
 
                 <div class="mb-3">
                     <label for="brandname" class="form-label font-weight-bold">Tên thương hiệu</label>
-                    <input type="text" name="brandname" id="brandname" class="form-control form-control-lg" placeholder="Ví dụ: Apple, Samsung, Sony..." required>
+                    <input type="text" name="brandname" id="brandname" class="form-control form-control-lg" value="{{ old('brandname') }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="slug" class="form-label font-weight-bold">Đường dẫn (Slug)</label>
-                    <input type="text" name="slug" id="slug" class="form-control form-control-lg" placeholder="Ví dụ: apple, samsung, sony" required>
+                    <input type="text" name="slug" id="slug" class="form-control form-control-lg" value="{{ old('slug') }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="sort_order" class="form-label font-weight-bold">Thứ tự sắp xếp</label>
-                    <input type="number" name="sort_order" id="sort_order" class="form-control form-control-lg" value="1" min="1">
+                    <input type="number" name="sort_order" id="sort_order" class="form-control form-control-lg" value="{{ old('sort_order',1) }}">
                 </div>
 
                 <div class="mb-3">
@@ -36,7 +42,17 @@
 
                 <div class="mb-3">
                     <label for="description" class="form-label font-weight-bold">Mô tả</label>
-                    <textarea name="description" id="description" class="form-control form-control-lg" rows="3" placeholder="Nhập mô tả thương hiệu (nếu có)"></textarea>
+                    <textarea name="description" id="description" class="form-control form-control-lg" rows="3" {{ old('description') }}></textarea>
+                </div>
+
+                <div class="mb-3"> 
+                    <label class="form-label d-block"> Trạng thái </label> 
+
+                    <input type="radio" class="btn-check" name="status" id="active" value="1" {{ old('status',1)==1 ? 'checked' : '' }}> 
+                    <label class="btn btn-outline-success" for="active"> Hiển thị </label> 
+                    
+                    <input type="radio" class="btn-check" name="status" id="inactive" value="0" {{ old('status',1)==0 ? 'checked' : '' }}> 
+                    <label class="btn btn-outline-danger" for="inactive"> Ẩn </label> 
                 </div>
 
                 <div class="mt-4">

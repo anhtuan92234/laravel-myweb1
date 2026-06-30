@@ -5,6 +5,18 @@
 @section('content')
 <h2 class="mb-3">DANH SÁCH LOẠI SẢN PHẨM</h2>
 
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 <div class="mb-3">
     <a href="{{ route('admin.categories.create') }}" class="btn btn-success btn-lg">
         <i class="bi bi-plus-circle"></i> + Thêm mới
@@ -65,14 +77,13 @@
                         <i class="bi bi-pencil-square"></i> Sửa
                     </a>
 
-                    <form action="{{ route('admin.categories.destroy', $item->cateid) }}"
-                        method="POST"
-                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này không?');">
+                    <form action="{{ route('admin.categories.destroy', $item->cateid) }}" method="POST" 
+                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa loại sản phẩm này không?');">
 
                         @csrf
                         @method('DELETE')
 
-                        <button type="submit" class="btn btn-danger btn-sm">
+                        <button type="submit" class="btn btn-danger btn-sm" disabled>
                             <i class="bi bi-trash"></i> Xóa
                         </button>
                     </form>

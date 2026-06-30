@@ -18,24 +18,15 @@
         @csrf
         <div class="row">
             <div class="col-md-6">
+
                 <div class="mb-3">
                     <label class="form-label">Tên sản phẩm</label>
-                    <input
-                        type="text"
-                        name="productname"
-                        class="form-control"
-                        value="{{ old('productname') }}"
-                        required>
+                    <input type="text" name="productname" class="form-control" value="{{ old('productname') }}" required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Slug</label>
-                    <input
-                        type="text"
-                        name="slug"
-                        class="form-control"
-                        value="{{ old('slug') }}"
-                        required>
+                    <label class="form-label"> Slug </label>
+                    <input type="text" name="slug" class="form-control" value="{{ old('slug') }}" required>
                 </div>
 
                 <div class="mb-3">
@@ -44,8 +35,7 @@
                         <option value="">-- Chọn loại sản phẩm --</option>
 
                         @foreach($categories as $category)
-                            <option
-                                value="{{ $category->cateid }}"
+                            <option value="{{ $category->cateid }}"
                                 {{ old('cateid') == $category->cateid ? 'selected' : '' }}>
                                 {{ $category->catename }}
                             </option>
@@ -76,78 +66,34 @@
             <div class="col-md-6">
 
                 <div class="mb-3">
-                    <label class="form-label">Giá</label>
-
-                    <input
-                        type="number"
-                        name="price"
-                        class="form-control"
-                        value="{{ old('price') }}"
-                        required>
+                    <label class="form-label"> Giá </label>
+                    <input type="number" name="price" class="form-control" value="{{ old('price') }}" required>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Giá khuyến mãi</label>
-
-                    <input
-                        type="number"
-                        name="pricediscount"
-                        class="form-control"
-                        value="{{ old('pricediscount',0) }}">
+                    <input type="number" name="pricediscount" class="form-control" value="{{ old('pricediscount',0) }}">
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label d-block">
-                        Trạng thái
-                    </label>
+                    <label class="form-label d-block"> Trạng thái </label>
 
-                    <input
-                        type="radio"
-                        class="btn-check"
-                        name="status"
-                        id="active"
-                        value="1"
-                        {{ old('status',1)==1 ? 'checked' : '' }}>
+                    <input type="radio" class="btn-check" name="status" id="active" value="1" {{ old('status',1)==1 ? 'checked' : '' }}>
+                    <label class="btn btn-outline-success" for="active"> Hiển thị </label>
 
-                    <label class="btn btn-outline-success"
-                           for="active">
-                        Hiển thị
-                    </label>
-
-
-                    <input
-                        type="radio"
-                        class="btn-check"
-                        name="status"
-                        id="inactive"
-                        value="0"
-                        {{ old('status',1)==0 ? 'checked' : '' }}>
-
-                    <label class="btn btn-outline-danger"
-                           for="inactive">
-                        Ẩn
-                    </label>
-
+                    <input type="radio" class="btn-check" name="status" id="inactive" value="0" {{ old('status',1)==0 ? 'checked' : '' }}>
+                    <label class="btn btn-outline-danger"for="inactive"> Ẩn </label>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">
-                        Mô tả sản phẩm
-                    </label>
-
-                    <textarea
-                        name="description"
-                        rows="4"
-                        class="form-control">{{ old('description') }}</textarea>
+                    <label class="form-label"> Mô tả sản phẩm </label>
+                    <textarea name="description" rows="4" class="form-control">{{ old('description') }}</textarea>
                 </div>
 
             </div>
-
         </div>
 
-        <button type="submit" class="btn btn-primary">
-            Lưu sản phẩm
-        </button>
+        <button type="submit" class="btn btn-primary"> Lưu sản phẩm </button>
 
         <a href="{{ route('admin.products.index') }}"
            class="btn btn-secondary">

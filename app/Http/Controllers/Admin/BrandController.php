@@ -39,24 +39,52 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'brandname' => 'required|max:255',
-            'slug'      => 'required|max:255',
-        ], [
-            'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
-            'slug.required'      => 'Vui lòng nhập slug thương hiệu!',
-        ]);
+        // $request->validate([
+        //     'brandname' => 'required|max:255',
+        //     'slug'      => 'required|max:255',
+        // ], [
+        //     'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
+        //     'slug.required'      => 'Vui lòng nhập slug thương hiệu!',
+        // ]);
 
-        Brand::create([
-            'brandname'   => $request->brandname,
-            'slug'        => $request->slug,
-            'description' => $request->description,
-            'sort_order'  => $request->sort_order ?? 1,
-            'status'      => $request->status ?? 1,
-            // 'image'    => $request->image, (Nếu bạn có xử lý file upload ở bước sau)
-        ]);
+        // Brand::create([
+        //     'brandname'   => $request->brandname,
+        //     'slug'        => $request->slug,
+        //     'description' => $request->description,
+        //     'sort_order'  => $request->sort_order ?? 1,
+        //     'status'      => $request->status ?? 1,
+        //     // 'image'    => $request->image, (Nếu bạn có xử lý file upload ở bước sau)
+        // ]);
 
-        return redirect()->route('admin.brands.index')->with('success', 'Thêm thương hiệu mới thành công!');
+        // return redirect()->route('admin.brands.index')->with('success', 'Thêm thương hiệu mới thành công!');
+
+        try {
+            $request->validate([
+                'brandname' => 'required|max:255',
+                'slug' => 'required|max:255',
+            ], [
+                'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
+                'slug.required' => 'Vui lòng nhập slug!',
+            ]);
+    
+            Brand::create([
+                'brandname' => $request->brandname,
+                'slug' => $request->slug,
+                'description' => $request->description,
+                'sort_order' => $request->sort_order ?? 1,
+                'status' => $request->status ?? 1,
+                // 'image'    => $request->image, (Nếu bạn có xử lý file upload ở bước sau)
+            ]);
+
+            return redirect()
+                ->route('admin.brands.index')
+                ->with('success', 'Thêm thương hiệu thành công');
+        } catch (\Exception $e) {
+    
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -73,7 +101,12 @@ class BrandController extends Controller
      */
     public function edit(string $id)
     {
-        $brand = Brand::findOrFail($id);
+        $brand = Brand::find($id);
+        if (!$brand) {
+        return redirect()
+            ->route('admin.brands.index')
+            ->with('error', 'Thương hiệu không tồn tại');
+    }
         return view('admin.brands.edit', compact('brand'));
     }
 
@@ -82,21 +115,52 @@ class BrandController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'brandname' => 'required|max:255',
-            'slug'      => 'required|max:255',
-        ]);
+        // $request->validate([
+        //     'brandname' => 'required|max:255',
+        //     'slug'      => 'required|max:255',
+        // ]);
 
-        $brand = Brand::findOrFail($id);
-        $brand->update([
-            'brandname'   => $request->brandname,
-            'slug'        => $request->slug,
-            'description' => $request->description,
-            'sort_order'  => $request->sort_order ?? 1,
-            'status'      => $request->status ?? 1,
-        ]);
+        // $brand = Brand::findOrFail($id);
+        // $brand->update([
+        //     'brandname'   => $request->brandname,
+        //     'slug'        => $request->slug,
+        //     'description' => $request->description,
+        //     'sort_order'  => $request->sort_order ?? 1,
+        //     'status'      => $request->status ?? 1,
+        // ]);
 
-        return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thông tin thương hiệu thành công!');
+        // return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thông tin thương hiệu thành công!');
+
+        try {
+            $request->validate([
+                'brandname' => 'required|max:255',
+                'slug' => 'required|max:255',
+            ], [
+                'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
+                'slug.required' => 'Vui lòng nhập slug!',
+            ]);
+    
+            $brand = Brand::find($id);
+            if (!$brand) {
+                return redirect()
+                    ->route('admin.brands.index')
+                    ->with('error', 'Thương hiệu không tồn tại');
+            }
+    
+            $brand->update([
+                'brandname' => $request->brandname,
+                'slug' => $request->slug,
+                'description' => $request->description,
+                'sort_order' => $request->sort_order ?? 1,
+                'status' => $request->status ?? 1,
+            ]);
+    
+            return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thương hiệu thành công');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -104,9 +168,9 @@ class BrandController extends Controller
      */
     public function destroy(string $id)
     {
-        $brand = Brand::findOrFail($id);
-        $brand->delete();
+        // $brand = Brand::findOrFail($id);
+        // $brand->delete();
         
-        return redirect()->route('admin.brands.index')->with('success', 'Xóa thương hiệu thành công!');
+        // return redirect()->route('admin.brands.index')->with('success', 'Xóa thương hiệu thành công!');
     }
 }

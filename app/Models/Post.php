@@ -11,9 +11,8 @@ class Post extends Model
     protected $fillable = [
         'title',
         'slug',
-        'detail',
+        'content',
         'image',
-        'topic_id', // Thay đổi cho khớp tên cột trong DB của bạn nếu có
         'user_id',  // Khóa ngoại liên kết với bảng users
         'status'
     ];

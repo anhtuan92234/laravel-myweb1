@@ -5,6 +5,18 @@
 @section('content')
 <h2 class="mb-3">DANH SÁCH THƯƠNG HIỆU</h2>
 
+@if(session('success'))
+<div class="alert alert-success">
+    {{ session('success') }}
+</div>
+@endif
+
+@if(session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
+
 <div class="mb-3">
     <a href="{{ route('admin.brands.create') }}" class="btn btn-success btn-lg">
         <i class="bi bi-plus-circle"></i> + Thêm mới

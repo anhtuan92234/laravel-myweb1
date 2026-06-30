@@ -43,32 +43,38 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'fullname' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-        ], [
-            'fullname.required' => 'Vui lòng nhập họ và tên!',
-            'username.required' => 'Vui lòng nhập tên tài khoản!',
-            'username.unique'   => 'Tên tài khoản này đã tồn tại!',
-            'email.required'    => 'Vui lòng nhập địa chỉ email!',
-            'email.unique'      => 'Email này đã được sử dụng!',
-            'password.required' => 'Vui lòng nhập mật khẩu!',
-            'password.min'      => 'Mật khẩu phải chứa ít nhất 6 ký tự!',
-        ]);
+        try{
+            $request->validate([
+                'fullname' => 'required|string|max:255',
+                'username' => 'required|string|max:255|unique:users,username',
+                'email'    => 'required|email|unique:users,email',
+                'password' => 'required|min:6',
+            ], [
+                'fullname.required' => 'Vui lòng nhập họ và tên!',
+                'username.unique'   => 'Tên tài khoản này đã tồn tại!',
+                'email.required'    => 'Vui lòng nhập địa chỉ email!',
+                'email.unique'      => 'Email này đã được sử dụng!',
+                'password.required' => 'Vui lòng nhập mật khẩu!',
+                'password.min'      => 'Mật khẩu phải chứa ít nhất 6 ký tự!',
+            ]);
+            
+            User::create([
+                'fullname' => $request->fullname,
+                'username' => $request->username,
+                'email'    => $request->email,
+                'password' => Hash::make($request->password),
+                'phone'    => $request->phone,
+                'role'     => $request->role ?? 'user',
+                'status'   => $request->status ?? 1,
+            ]);
+            
+            return redirect()->route('admin.users.index')->with('success', 'Thêm thành viên mới thành công!');
+        } catch (\Exception $e){
 
-        User::create([
-            'fullname' => $request->fullname,
-            'username' => $request->username,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'phone'    => $request->phone,
-            'role'     => $request->role ?? 'user',
-            'status'   => $request->status ?? 1,
-        ]);
-
-        return redirect()->route('admin.users.index')->with('success', 'Thêm thành viên mới thành công!');
+            return back()
+                ->withInput()
+                ->with('error',$e->getMessage());
+        }
     }
 
     /**
@@ -85,8 +91,14 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::findOrFail($id);
-        return view('admin.users.edit', compact('user'));
+        $user = User::find($id);
+        if(!$user){
+            return redirect()
+            ->route('admin.users.index')
+            ->with('error','Thành viên không tồn tại');
+        }
+
+        return view('admin.users.edit',compact('user'));
     }
 
     /**
@@ -94,27 +106,41 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'fullname' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users,username,' . $id,
-            'email'    => 'required|email|unique:users,email,' . $id,
-        ]);
-
-        $user = User::findOrFail($id);
-        $data = [
-            'fullname' => $request->fullname,
-            'username' => $request->username,
-            'email'    => $request->email,
-            'phone'    => $request->phone,
-            'role'     => $request->role,
-            'status'   => $request->status,
-        ];
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+        try {
+            $request->validate([
+                'fullname' => 'required|max:255',
+                'username' => 'required|max:255|unique:users,username,' . $id,
+                'email'    => 'required|email|unique:users,email,' . $id,
+            ]);
+            
+            $user = User::find($id);
+            
+            if(!$user){
+                return redirect()
+                ->route('admin.users.index')
+                ->with('error','Thành viên không tồn tại');
+            }
+            $data = [
+                'fullname' => $request->fullname,
+                'username' => $request->username,
+                'email'    => $request->email,
+                'phone'    => $request->phone,
+                'role'     => $request->role,
+                'status'   => $request->status,
+            ];
+            
+            if($request->filled('password')){
+                $data['password'] = Hash::make($request->password);
+            }
+            
+            $user->update($data);
+            
+            return redirect()->route('admin.users.index')->with('success','Cập nhật thành viên thành công');
+        } catch (\Exception $e){
+            return back()
+            ->withInput()
+            ->with('error',$e->getMessage());
         }
-        $user->update($data);
-
-        return redirect()->route('admin.users.index')->with('success', 'Cập nhật thành viên thành công!');
     }
 
     /**
@@ -122,9 +148,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::findOrFail($id);
-        $user->delete();
+        // $user = User::findOrFail($id);
+        // $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'Xóa thành viên thành công!');
+        // return redirect()->route('admin.users.index')->with('success', 'Xóa thành viên thành công!');
     }
 }

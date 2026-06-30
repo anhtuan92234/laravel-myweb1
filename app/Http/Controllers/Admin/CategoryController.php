@@ -44,22 +44,50 @@ class CategoryController extends Controller
         // ]);
         // return redirect()->route('admin.categories.index');
 
-        $request->validate([
-            'catename' => 'required|max:255',
-            'slug'     => 'required|max:255',
-        ], [
-            'catename.required' => 'Vui lòng nhập tên loại sản phẩm!',
-            'slug.required'     => 'Vui lòng nhập danh mục slug!',
-        ]);
+        // $request->validate([
+        //     'catename' => 'required|max:255',
+        //     'slug'     => 'required|max:255',
+        // ], [
+        //     'catename.required' => 'Vui lòng nhập tên loại sản phẩm!',
+        //     'slug.required'     => 'Vui lòng nhập danh mục slug!',
+        // ]);
 
-        Category::create([
-            'catename'    => $request->catename,
-            'slug'        => $request->slug,    
-            'description' => $request->description,
-            'status'      => $request->status ?? 1,
-        ]);
+        // Category::create([
+        //     'catename'    => $request->catename,
+        //     'slug'        => $request->slug,    
+        //     'description' => $request->description,
+        //     'status'      => $request->status ?? 1,
+        // ]);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Thêm danh mục mới thành công!');
+        // return redirect()->route('admin.categories.index')->with('success', 'Thêm danh mục mới thành công!');
+
+        try {
+
+            $request->validate([
+                'catename' => 'required|max:255',
+                'slug' => 'required|max:255',
+            ], [
+                'catename.required' => 'Vui lòng nhập tên loại sản phẩm!',
+                'slug.required' => 'Vui lòng nhập slug!',
+            ]);
+    
+            Category::create([
+                'catename' => $request->catename,
+                'slug' => $request->slug,
+                'description' => $request->description,
+                'status' => $request->status ?? 1,
+            ]);
+    
+            return redirect()
+                ->route('admin.categories.index')
+                ->with('success', 'Thêm danh mục thành công');
+    
+        } catch (\Exception $e) {
+    
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function show(string $id)
@@ -70,29 +98,52 @@ class CategoryController extends Controller
 
     public function edit(string $id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::find($id);
+        if (!$category) {
+            return redirect()
+            ->route('admin.categories.index')
+            ->with('error', 'Danh mục không tồn tại');
+    }
         return view('admin.categories.edit', compact('category'));
     }
 
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'catename' => 'required|max:255',
-            'slug'     => 'required|max:255',
-        ], [
-            'catename.required' => 'Vui lòng nhập tên loại sản phẩm!',
-            'slug.required'     => 'Vui lòng nhập danh mục slug!',
-        ]);
+        try {
 
-        $category = Category::findOrFail($id);
-        $category->update([
-            'catename'    => $request->catename,
-            'slug'        => $request->slug,
-            'description' => $request->description,
-            'status'      => $request->status,
-        ]);
-
-        return redirect()->route('admin.categories.index')->with('success', 'Cập nhật danh mục thành công!');
+            $request->validate([
+                'catename' => 'required|max:255',
+                'slug' => 'required|max:255',
+            ], [
+                'catename.required' => 'Vui lòng nhập tên loại sản phẩm!',
+                'slug.required' => 'Vui lòng nhập slug!',
+            ]);
+    
+            $category = Category::find($id);
+    
+            if (!$category) {
+                return redirect()
+                    ->route('admin.categories.index')
+                    ->with('error', 'Danh mục không tồn tại');
+            }
+    
+            $category->update([
+                'catename' => $request->catename,
+                'slug' => $request->slug,
+                'description' => $request->description,
+                'status' => $request->status,
+            ]);
+    
+            return redirect()
+                ->route('admin.categories.index')
+                ->with('success', 'Cập nhật danh mục thành công');
+    
+        } catch (\Exception $e) {
+    
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function destroy(string $id)
@@ -103,9 +154,9 @@ class CategoryController extends Controller
         
         // return redirect()->route('admin.categories.index');
 
-        $category = Category::findOrFail($id);
-        $category->delete();
+        // $category = Category::findOrFail($id);
+        // $category->delete();
         
-        return redirect()->route('admin.categories.index')->with('success', 'Xóa danh mục thành công!');
+        // return redirect()->route('admin.categories.index')->with('success', 'Xóa danh mục thành công!');
     }
 }
