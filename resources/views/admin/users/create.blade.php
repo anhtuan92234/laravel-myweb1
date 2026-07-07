@@ -38,10 +38,12 @@
 
                 <div class="mb-3">
                     <label for="role" class="form-label font-weight-bold">Vai trò</label>
-                    <select name="role" class="form-select form-select-lg">
-                        <option value="user"{{ old('role')=='user' ? 'selected' : '' }}> User</option> 
-                        <option value="admin" {{ old('role')=='admin' ? 'selected' : '' }}> Admin </option>
-                    </select>
+                    
+                <select name="role" class="form-select form-select-lg">
+                    <option value="2" {{ old('role',2)==2 ? 'selected' : '' }}>Nhân viên</option>
+                    <option value="1" {{ old('role',2)==1 ? 'selected' : '' }}>Quản lý</option>
+                </select>
+                
                 </div>
                 
                 <div class="mb-3">

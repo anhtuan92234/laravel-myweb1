@@ -18,6 +18,7 @@
         <div class="card-body">
         <form action="{{ route('admin.categories.update', $category->cateid) }}" method="POST">
             @csrf
+            @method('PUT')
 
             <div class="mb-3">
                 <label class="form-label">Tên loại sản phẩm</label>

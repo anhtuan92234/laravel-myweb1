@@ -47,18 +47,26 @@
             @endif
         </td>
         <td class="text-center">
-            <div class="d-flex justify-content-center gap-1">
-                <form action="{{ route('admin.users.destroy', $item->id) }}"
-                    method="POST"
-                    onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash"></i> Xóa
-                    </button>
-                </form>
-            </div>
-        </td>
+    <div class="d-flex justify-content-center gap-1">
+
+        <a href="{{ route('admin.users.edit', $item->id) }}"
+            class="btn btn-warning btn-sm">
+            <i class="bi bi-pencil-square"></i> Sửa
+        </a>
+
+        <form action="{{ route('admin.users.destroy', $item->id) }}"
+            method="POST"
+            onsubmit="return confirm('Bạn có chắc chắn muốn xóa người dùng này không?');">
+
+            @csrf
+            @method('DELETE')
+
+            <button type="submit" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i> Xóa
+            </button>
+        </form>
+    </div>
+</td>
     </tr>
     @empty
     <tr>

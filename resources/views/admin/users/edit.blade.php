@@ -47,12 +47,12 @@
 
                 <div class="mb-3">
                     <label class="form-label"> Vai trò </label>
-                    <select name="role" class="form-select form-select-lg">
-                        
-                    <option value="user" {{ old('role', $user->role) == 'user' ? 'selected' : '' }}> User </option>
-                    
-                    <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}> Admin </option>
+
+                <select name="role" class="form-select form-select-lg">   
+                    <option value="2"{{ old('role',$user->role)==2 ? 'selected' : '' }}>Nhân viên</option>
+                    <option value="1"{{ old('role',$user->role)==1 ? 'selected' : '' }}>Quản lý</option>
                 </select>
+                
                 </div>
 
                 <div class="mb-3">

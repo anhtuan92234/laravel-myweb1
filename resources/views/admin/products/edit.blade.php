@@ -17,10 +17,10 @@
     </div>
 @endif
 
-<form action="{{ route('admin.products.update', $product->id) }}"
-      method="POST">
-
-    @csrf
+<form action="{{ route('admin.products.update', $product->id) }}" method="POST">
+      @csrf
+      @method('PUT')
+      
     <div class="row">
         <div class="col-md-6">
             <div class="mb-3">

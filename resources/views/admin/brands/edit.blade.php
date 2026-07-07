@@ -18,6 +18,7 @@
             <form action="{{ route('admin.brands.update', $brand->id) }}"
             method="POST">
             @csrf
+            @method('PUT')
             
             <div class="mb-3">
                 <label class="form-label">Tên thương hiệu</label>
