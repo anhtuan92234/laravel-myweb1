@@ -40,13 +40,9 @@
         <tr>
             <td class="text-center">{{ $list->firstItem() + $loop->index }}</td>
             
-            <td class="text-center">
-                @if(!empty($item->image) && (str_starts_with($item->image, 'http://') || str_starts_with($item->image, 'https://')))
-                    <img src="{{ $item->image }}" alt="{{ $item->brandname }}" width="80" class="img-thumbnail">
-                @elseif(!empty($item->image) && file_exists(public_path('uploads/brands/' . $item->image)))
-                    <img src="{{ asset('uploads/brands/' . $item->image) }}" alt="{{ $item->brandname }}" width="80" class="img-thumbnail">
-                @else
-                    <img src="{{ asset('images/default.png') }}" alt="Default" width="80" class="img-thumbnail">
+           <td class="text-center">
+                @if($item->image)
+                <img src="{{ asset('storage/brands/' . $item->image) }}" width="80" class="img-thumbnail">
                 @endif
             </td>
             

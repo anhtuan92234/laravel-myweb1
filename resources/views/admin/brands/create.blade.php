@@ -10,7 +10,7 @@
 
     <div class="card shadow-sm col-md-8">
         <div class="card-body">
-            <form action="{{ route('admin.brands.store') }}" method="POST">
+            <form action="{{ route('admin.brands.store') }}" method="POST"  enctype="multipart/form-data">>
                 @csrf
 
                 <div class="mb-3">
@@ -26,6 +26,19 @@
                     <input type="text" name="slug" id="slug" class="form-control form-control-lg" value="{{ old('slug') }}">
                     @error('slug')
                     <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="mb-3 img-group">
+                    <label class="form-label">Hình ảnh</label>
+                    <input type="file" name="img" class="form-control img-input @error('img') is-invalid @enderror">
+                    
+                    <div class="img-preview mt-2"></div>
+                    
+                    @error('img')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                     @enderror
                 </div>
 

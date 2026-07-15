@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use App\Http\Requests\Admin\BrandRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,40 +41,23 @@ class BrandController extends Controller
      */
     public function store(BrandRequest $request)
     {
-        // try {
-        //     $request->validate([
-        //         'brandname' => 'required|max:255',
-        //         'slug' => 'required|max:255',
-        //     ], [
-        //         'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
-        //         'slug.required' => 'Vui lòng nhập slug!',
-        //     ]);
-    
-        //     Brand::create([
-        //         'brandname' => $request->brandname,
-        //         'slug' => $request->slug,
-        //         'description' => $request->description,
-        //         'sort_order' => $request->sort_order ?? 1,
-        //         'status' => $request->status ?? 1,
-        //         // 'image'    => $request->image, (Nếu bạn có xử lý file upload ở bước sau)
-        //     ]);
-
-        //     return redirect()
-        //         ->route('admin.brands.index')
-        //         ->with('success', 'Thêm thương hiệu thành công');
-        // } catch (\Exception $e) {
-    
-        //     return back()
-        //         ->withInput()
-        //         ->with('error', $e->getMessage());
-        // }
-
             try {
+                $fileName = null;
+                if ($request->hasFile('img')) {
+                    $file = $request->file('img');
+                    $fileName = Str::slug($request->brandname)
+                    . '-' . time()
+                    . '.' . $file->extension();
+                    // hình ảnh được lưu vào thư mục storage/app/public/brands
+                    $file->storeAs('brands', $fileName, 'public');
+                }
+
                 Brand::create([
                     'brandname' => $request->brandname,
                     'slug' => $request->slug,
                     'status' => $request->status,
                     'description' => $request->description,
+                    'image' => $fileName
                 ]);
                 
                 return redirect()
