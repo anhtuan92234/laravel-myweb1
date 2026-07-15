@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\BrandRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Brand;
@@ -37,53 +38,51 @@ class BrandController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BrandRequest $request)
     {
-        // $request->validate([
-        //     'brandname' => 'required|max:255',
-        //     'slug'      => 'required|max:255',
-        // ], [
-        //     'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
-        //     'slug.required'      => 'Vui lòng nhập slug thương hiệu!',
-        // ]);
-
-        // Brand::create([
-        //     'brandname'   => $request->brandname,
-        //     'slug'        => $request->slug,
-        //     'description' => $request->description,
-        //     'sort_order'  => $request->sort_order ?? 1,
-        //     'status'      => $request->status ?? 1,
-        //     // 'image'    => $request->image, (Nếu bạn có xử lý file upload ở bước sau)
-        // ]);
-
-        // return redirect()->route('admin.brands.index')->with('success', 'Thêm thương hiệu mới thành công!');
-
-        try {
-            $request->validate([
-                'brandname' => 'required|max:255',
-                'slug' => 'required|max:255',
-            ], [
-                'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
-                'slug.required' => 'Vui lòng nhập slug!',
-            ]);
+        // try {
+        //     $request->validate([
+        //         'brandname' => 'required|max:255',
+        //         'slug' => 'required|max:255',
+        //     ], [
+        //         'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
+        //         'slug.required' => 'Vui lòng nhập slug!',
+        //     ]);
     
-            Brand::create([
-                'brandname' => $request->brandname,
-                'slug' => $request->slug,
-                'description' => $request->description,
-                'sort_order' => $request->sort_order ?? 1,
-                'status' => $request->status ?? 1,
-                // 'image'    => $request->image, (Nếu bạn có xử lý file upload ở bước sau)
-            ]);
+        //     Brand::create([
+        //         'brandname' => $request->brandname,
+        //         'slug' => $request->slug,
+        //         'description' => $request->description,
+        //         'sort_order' => $request->sort_order ?? 1,
+        //         'status' => $request->status ?? 1,
+        //         // 'image'    => $request->image, (Nếu bạn có xử lý file upload ở bước sau)
+        //     ]);
 
-            return redirect()
+        //     return redirect()
+        //         ->route('admin.brands.index')
+        //         ->with('success', 'Thêm thương hiệu thành công');
+        // } catch (\Exception $e) {
+    
+        //     return back()
+        //         ->withInput()
+        //         ->with('error', $e->getMessage());
+        // }
+
+            try {
+                Brand::create([
+                    'brandname' => $request->brandname,
+                    'slug' => $request->slug,
+                    'status' => $request->status,
+                    'description' => $request->description,
+                ]);
+                
+                return redirect()
                 ->route('admin.brands.index')
-                ->with('success', 'Thêm thương hiệu thành công');
-        } catch (\Exception $e) {
-    
-            return back()
+                ->with('success', 'Thêm thành công.');
+            } catch (\Exception $e) {
+                return back()
                 ->withInput()
-                ->with('error', $e->getMessage());
+                ->with('error', 'Thêm thất bại.');
         }
     }
 
@@ -113,53 +112,56 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(BrandRequest $request, string $id)
     {
-        // $request->validate([
-        //     'brandname' => 'required|max:255',
-        //     'slug'      => 'required|max:255',
-        // ]);
-
-        // $brand = Brand::findOrFail($id);
-        // $brand->update([
-        //     'brandname'   => $request->brandname,
-        //     'slug'        => $request->slug,
-        //     'description' => $request->description,
-        //     'sort_order'  => $request->sort_order ?? 1,
-        //     'status'      => $request->status ?? 1,
-        // ]);
-
-        // return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thông tin thương hiệu thành công!');
-
-        try {
-            $request->validate([
-                'brandname' => 'required|max:255',
-                'slug' => 'required|max:255',
-            ], [
-                'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
-                'slug.required' => 'Vui lòng nhập slug!',
-            ]);
+        // try {
+        //     $request->validate([
+        //         'brandname' => 'required|max:255',
+        //         'slug' => 'required|max:255',
+        //     ], [
+        //         'brandname.required' => 'Vui lòng nhập tên thương hiệu!',
+        //         'slug.required' => 'Vui lòng nhập slug!',
+        //     ]);
     
-            $brand = Brand::find($id);
-            if (!$brand) {
+        //     $brand = Brand::find($id);
+        //     if (!$brand) {
+        //         return redirect()
+        //             ->route('admin.brands.index')
+        //             ->with('error', 'Thương hiệu không tồn tại');
+        //     }
+    
+        //     $brand->update([
+        //         'brandname' => $request->brandname,
+        //         'slug' => $request->slug,
+        //         'description' => $request->description,
+        //         'sort_order' => $request->sort_order ?? 1,
+        //         'status' => $request->status ?? 1,
+        //     ]);
+    
+        //     return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thương hiệu thành công');
+        // } catch (\Exception $e) {
+        //     return back()
+        //         ->withInput()
+        //         ->with('error', $e->getMessage());
+        // }
+
+            try {
+                $brand = Brand::findOrFail($id);
+
+                $brand->update([
+                    'brandname' => $request->brandname,
+                    'slug' => $request->slug,
+                    'status' => $request->status,
+                    'description' => $request->description,
+                ]);
+                
                 return redirect()
-                    ->route('admin.brands.index')
-                    ->with('error', 'Thương hiệu không tồn tại');
-            }
-    
-            $brand->update([
-                'brandname' => $request->brandname,
-                'slug' => $request->slug,
-                'description' => $request->description,
-                'sort_order' => $request->sort_order ?? 1,
-                'status' => $request->status ?? 1,
-            ]);
-    
-            return redirect()->route('admin.brands.index')->with('success', 'Cập nhật thương hiệu thành công');
-        } catch (\Exception $e) {
-            return back()
+                ->route('admin.brands.index')
+                ->with('success', 'Cập nhật thành công.');
+            } catch (\Exception $e) {
+                return back()
                 ->withInput()
-                ->with('error', $e->getMessage());
+                ->with('error', 'Cập nhật thất bại.');
         }
     }
 

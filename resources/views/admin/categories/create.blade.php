@@ -5,18 +5,8 @@
 @section('content')
 <div class="container-fluid fs-5">
     <h2 class="mb-4">THÊM LOẠI SẢN PHẨM</h2>
-
-    @if($errors->any())
-    <div class="alert alert-danger">
-        <ul class="mb-0">
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-
-    @if(session('error')) <div class="alert alert-danger"> {{ session('error') }} </div> @endif
+    
+    <x-admin.alert />
 
     <div class="card shadow-sm col-md-8">
         <div class="card-body">

@@ -6,16 +6,23 @@
 
 <div class="border rounded bg-white p-4 shadow-sm">
 
-<h3 class="mb-4">
-    Sửa sản phẩm
-</h3>
+<h3 class="mb-4">Sửa sản phẩm</h3>
 
-{{-- Hiển thị lỗi --}}
-@if(session('error'))
+    @if(session('error'))
     <div class="alert alert-danger">
         {{ session('error') }}
     </div>
-@endif
+    @endif
+
+    @if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
 
 <form action="{{ route('admin.products.update', $product->id) }}" method="POST">
       @csrf
@@ -24,37 +31,25 @@
     <div class="row">
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="form-label">
-                    Tên sản phẩm
-                </label>
-
-                <input
-                    type="text"
-                    name="productname"
-                    class="form-control"
-                    value="{{ old('productname', $product->productname) }}"
-                    required>
+                <label class="form-label"> Tên sản phẩm </label>
+                 <input type="text" name="productname" class="form-control" value="{{ old('productname') }}">
+                    @error('productname')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
             </div>
 
 
             <div class="mb-3">
-                <label class="form-label">
-                    Slug
-                </label>
-
-                <input
-                    type="text"
-                    name="slug"
-                    class="form-control"
-                    value="{{ old('slug', $product->slug) }}"
-                    required>
+                <label class="form-label"> Slug </label>
+                <input type="text" name="slug" class="form-control" value="{{ old('slug') }}">
+                    @error('slug')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
             </div>
 
 
             <div class="mb-3">
-                <label class="form-label">
-                    Loại sản phẩm
-                </label>
+                <label class="form-label"> Loại sản phẩm </label>
                 <select name="cateid"
                         class="form-select">
                     <option value="">
@@ -68,6 +63,9 @@
                         </option>
                     @endforeach
                 </select>
+                @error('cateid')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="mb-3">
@@ -88,91 +86,55 @@
                         </option>
                     @endforeach
                 </select>
+                @error('brandid')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
         <div class="col-md-6">
             <div class="mb-3">
-                <label class="form-label">
-                    Giá
-                </label>
+                <label class="form-label">Giá</label>
+                 <input type="number" name="price" class="form-control" value="{{ old('price') }}">
+                    @error('price')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
 
-                <input
-                    type="number"
-                    name="price"
-                    class="form-control"
-                    value="{{ old('price', $product->price) }}"
-                    required>
+            <div class="mb-3">
+                <label class="form-label"> Giá khuyến mãi </label>
+                 <input type="number" name="pricediscount" class="form-control" value="{{ old('pricediscount',0) }}">
+                    @error('pricediscount')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
 
             </div>
 
             <div class="mb-3">
-                <label class="form-label">
-                    Giá khuyến mãi
-                </label>
+                <label class="form-label d-block">Trạng thái</label>
 
-                <input
-                    type="number"
-                    name="pricediscount"
-                    class="form-control"
-                    value="{{ old('pricediscount', $product->pricediscount) }}">
+                <input type="radio" class="btn-check" name="status" id="active" value="1" {{ old('status', $product->status) == 1 ? 'checked' : '' }}>
+                <label class="btn btn-outline-success" for="active"> Hiển thị </label>
 
+                <input type="radio" class="btn-check" name="status" id="inactive" value="0" {{ old('status', $product->status) == 0 ? 'checked' : '' }}>
+                <label class="btn btn-outline-danger" for="inactive"> Ẩn </label>
+                
+                @error('status')
+                <span class="text-danger d-block">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="mb-3">
-                <label class="form-label d-block">
-                    Trạng thái
-                </label>
-
-                <input
-                    type="radio"
-                    class="btn-check"
-                    name="status"
-                    id="active"
-                    value="1"
-                    {{ old('status', $product->status) == 1 ? 'checked' : '' }}>
-
-                <label class="btn btn-outline-success"
-                       for="active">
-                    Hiển thị
-                </label>
-
-                <input
-                    type="radio"
-                    class="btn-check"
-                    name="status"
-                    id="inactive"
-                    value="0"
-                    {{ old('status', $product->status) == 0 ? 'checked' : '' }}>
-
-                <label class="btn btn-outline-danger"
-                       for="inactive">
-                    Ẩn
-                </label>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">
-                    Mô tả sản phẩm
-                </label>
-
-                <textarea
-                    name="description"
-                    rows="4"
-                    class="form-control">{{ old('description', $product->description) }}</textarea>
+                <label class="form-label">Mô tả sản phẩm</label>
+                <textarea name="description" rows="4" class="form-control">{{ old('description', $product->description) }}</textarea>
+                 @error('description')
+                 <span class="text-danger">{{ $message }}</span>
+                 @enderror
             </div>
         </div>
     </div>
-
-    <button type="submit"
-            class="btn btn-primary">
-        Lưu sản phẩm
-    </button>
-
-    <a href="{{ route('admin.products.index') }}"
-       class="btn btn-secondary">
-        Quay lại
-    </a>
+    
+    <button type="submit" class="btn btn-primary"> Lưu sản phẩm </button>
+    <a href="{{ route('admin.products.index') }}" class="btn btn-secondary"> Quay lại </a>
 </form>
 </div>
 @endsection

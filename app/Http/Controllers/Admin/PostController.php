@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\PostRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\Post;
 use App\Models\User;
@@ -64,19 +65,9 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         try {
-            $request->validate([
-                'title' => 'required|max:200',
-                'slug' => 'required|max:255',
-                'user_id' => 'required'
-            ],[
-                'title.required' => 'Vui lòng nhập tiêu đề.',
-                'slug.required' => 'Vui lòng nhập slug.',
-                'user_id.required' => 'Vui lòng chọn người đăng.'
-            ]);
-    
             Post::create([
                 'title' => $request->title,
                 'slug' => $request->slug,
@@ -124,15 +115,9 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PostRequest $request, string $id)
     {
         try{
-            $request->validate([
-                'title'=>'required|max:200',
-                'slug'=>'required|max:255',
-                'user_id'=>'required'
-            ]);
-    
             $post = Post::find($id);
     
             if(!$post){

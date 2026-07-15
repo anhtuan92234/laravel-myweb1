@@ -8,11 +8,7 @@
 
 <h2 class="mb-4">CẬP NHẬT BÀI VIẾT</h2>
 
-@if(session('error'))
-<div class="alert alert-danger">
-    {{ session('error') }}
-</div>
-@endif
+<x-admin.alert />
 
 <div class="card shadow-sm col-md-9">
     <div class="card-body">
@@ -22,21 +18,36 @@
             
             <div class="mb-3">
                 <label class="form-label">Tiêu đề</label>
-                <input type="text" name="title" id="title" class="form-control" value="{{ old('title',$post->title) }}" required>
+                <input type="text" name="title" id="title" class="form-control" value="{{ old('title',$post->title) }}">
+                @error('title')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
             
             <div class="mb-3">
                 <label class="form-label">Slug</label>
-                <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug',$post->slug) }}" required> </div> 
+                <input type="text" name="slug" id="slug" class="form-control" value="{{ old('slug',$post->slug) }}">
+                @error('slug')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div> 
                 
             <div class="mb-3"> 
                 <label class="form-label"> Người đăng </label> 
-                <select name="user_id" class="form-select"> 
+                <select name="user_id" class="form-select">
                     <option value="">--Chọn người đăng--</option>
-                    @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ old('user_id', $post->user_id) == $user->id ? 'selected' : '' }}> {{ $user->fullname }} </option>
+                        @foreach($users as $user)
+                    <option
+                    value="{{ $user->id }}"
+                    {{ old('user_id',$post->user_id)==$user->id ? 'selected' : '' }}>
+                    {{ $user->fullname }}
+                    </option>
                     @endforeach
                 </select>
+                
+                @error('user_id')
+                <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
             
             <div class="mb-3">
@@ -47,11 +58,15 @@
             <div class="mb-3">
                 <label class="form-label d-block"> Trạng thái </label>
                 
-                <input type="radio"Mclass="btn-check" name="status" id="active" value="1" {{ old('status', $post->status) == 1 ? 'checked' : '' }}> 
+                <input type="radio" class="btn-check" name="status" id="active" value="1" {{ old('status',$post->status)==1 ? 'checked' : '' }}>
                 <label class="btn btn-outline-success" for="active"> Công khai </label>
                 
-                <input type="radio" class="btn-check" name="status" id="inactive" value="0" {{ old('status', $post->status) == 0 ? 'checked' : '' }}> 
+                <input type="radio" class="btn-check" name="status" id="inactive" value="0" {{ old('status',$post->status)==0 ? 'checked' : '' }}>
                 <label class="btn btn-outline-danger" for="inactive"> Bản nháp </label>
+
+                @error('status')
+                <span class="text-danger d-block">{{ $message }}</span>
+                @enderror
             </div>
             
             <button class="btn btn-primary"> 

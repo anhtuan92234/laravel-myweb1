@@ -6,11 +6,7 @@
 <div class="container-fluid fs-5">
     <h2 class="mb-4">THÊM MỚI THƯƠNG HIỆU</h2>
     
-    @if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-    @endif
+    <x-admin.alert />
 
     <div class="card shadow-sm col-md-8">
         <div class="card-body">
@@ -19,12 +15,18 @@
 
                 <div class="mb-3">
                     <label for="brandname" class="form-label font-weight-bold">Tên thương hiệu</label>
-                    <input type="text" name="brandname" id="brandname" class="form-control form-control-lg" value="{{ old('brandname') }}" required>
+                    <input type="text" name="brandname" id="brandname" class="form-control form-control-lg" value="{{ old('brandname') }}">
+                    @error('brandname')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="slug" class="form-label font-weight-bold">Đường dẫn (Slug)</label>
-                    <input type="text" name="slug" id="slug" class="form-control form-control-lg" value="{{ old('slug') }}" required>
+                    <input type="text" name="slug" id="slug" class="form-control form-control-lg" value="{{ old('slug') }}">
+                    @error('slug')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
@@ -33,27 +35,23 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="status" class="form-label font-weight-bold">Trạng thái</label>
-                    <select name="status" id="status" class="form-select form-select-lg">
-                        <option value="1">Hiển thị</option>
-                        <option value="0">Ẩn</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
                     <label for="description" class="form-label font-weight-bold">Mô tả</label>
                     <textarea name="description" id="description" class="form-control form-control-lg" rows="3" {{ old('description') }}></textarea>
                 </div>
 
-                <div class="mb-3"> 
-                    <label class="form-label d-block"> Trạng thái </label> 
+               <div class="mb-3">
+                <label class="form-label d-block"> Trạng thái </label>
 
-                    <input type="radio" class="btn-check" name="status" id="active" value="1" {{ old('status',1)==1 ? 'checked' : '' }}> 
-                    <label class="btn btn-outline-success" for="active"> Hiển thị </label> 
-                    
-                    <input type="radio" class="btn-check" name="status" id="inactive" value="0" {{ old('status',1)==0 ? 'checked' : '' }}> 
-                    <label class="btn btn-outline-danger" for="inactive"> Ẩn </label> 
-                </div>
+                <input class="btn-check" type="radio" name="status" id="active" value="1" {{ old('status')=='1' ? 'checked' : '' }}>
+                <label class="btn btn-outline-success" for="active"> Hiển thị </label>
+
+                <input class="btn-check" type="radio" name="status" id="inactive" value="0" {{ old('status')=='0' ? 'checked' : '' }}>
+                <label class="btn btn-outline-danger" for="inactive"> Ẩn </label>
+                
+                @error('status')
+                <span class="text-danger d-block">{{ $message }}</span>
+                @enderror
+            </div>
 
                 <div class="mt-4">
                     <button type="submit" class="btn btn-primary btn-lg px-4 me-2">

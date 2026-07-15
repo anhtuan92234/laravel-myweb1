@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\ProductRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Category;
@@ -80,37 +81,56 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        try {
+        // try {
+        //     if (empty($request->cateid)) {
+        //         return back()
+        //             ->withInput()
+        //             ->with('error', 'Vui lòng chọn loại sản phẩm');
+        //     }
 
-            if (empty($request->cateid)) {
-                return back()
-                    ->withInput()
-                    ->with('error', 'Vui lòng chọn loại sản phẩm');
-            }
+        //     Product::create([
+        //         'productname' => $request->productname,
+        //         'slug' => $request->slug,
+        //         'cateid' => $request->cateid,
+        //         'brandid' => $request->brandid,
+        //         'price' => $request->price,
+        //         'pricediscount' => $request->pricediscount ?? 0,
+        //         'status' => $request->status,
+        //         'description' => $request->description
+        //     ]);
 
+        //     return redirect()
+        //         ->route('admin.products.index')
+        //         ->with('success', 'Thêm sản phẩm thành công');
+
+        // } catch (\Exception $e) {
+
+        //     return back()
+        //         ->withInput()
+        //         ->with('error', $e->getMessage());
+        // }
+
+         try {
             Product::create([
-                'productname' => $request->productname,
-                'slug' => $request->slug,
-                'cateid' => $request->cateid,
-                'brandid' => $request->brandid,
-                'price' => $request->price,
-                'pricediscount' => $request->pricediscount ?? 0,
-                'status' => $request->status,
-                'description' => $request->description
+                'productname'   => $request->productname,
+                'slug'          => $request->slug,
+                'cateid'        => $request->cateid,
+                'brandid'       => $request->brandid,
+                'price'         => $request->price,
+                'pricediscount' => $request->pricediscount,
+                'status'        => $request->status,
+                'description'   => $request->description,
             ]);
-
             return redirect()
-                ->route('admin.products.index')
-                ->with('success', 'Thêm sản phẩm thành công');
-
+            ->route('admin.products.index')
+            ->with('success', 'Thêm sản phẩm thành công');
         } catch (\Exception $e) {
-
             return back()
-                ->withInput()
-                ->with('error', $e->getMessage());
-        }
+            ->withInput()
+            ->with('error', 'Thêm sản phẩm thất bại');
+        }    
     }
 
     /**
@@ -141,39 +161,36 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
         try {
-            if (empty($request->cateid)) {
-                return back()
-                    ->withInput()
-                    ->with('error', 'Vui lòng chọn loại sản phẩm');
-            }
-
             $product = Product::find($id);
+            
             if (!$product) {
                 return redirect()
-                    ->route('admin.products.index')
-                    ->with('error', 'Sản phẩm không tồn tại');
+                ->route('admin.products.index')
+                ->with('error', 'Sản phẩm không tồn tại');
             }
-
+            
             $product->update([
-                'productname' => $request->productname,
-                'slug' => $request->slug,
-                'cateid' => $request->cateid,
-                'brandid' => $request->brandid,
-                'price' => $request->price,
+                'productname'   => $request->productname,
+                'slug'          => $request->slug,
+                'cateid'        => $request->cateid,
+                'brandid'       => $request->brandid,
+                'price'         => $request->price,
                 'pricediscount' => $request->pricediscount,
-                'status' => $request->status,
-                'description' => $request->description
+                'status'        => $request->status,
+                'description'   => $request->description,
             ]);
-
-            return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công');
-        } catch (\Exception $e) {
-            return back()
+            
+            return redirect()
+            ->route('admin.products.index')
+            ->with('success', 'Cập nhật sản phẩm thành công');
+            } catch (\Exception $e) {
+                return back()
                 ->withInput()
-                ->with('error', $e->getMessage());
-        }
+                ->with('error', 'Cập nhật sản phẩm thất bại');
+            }
     }
 
     /**

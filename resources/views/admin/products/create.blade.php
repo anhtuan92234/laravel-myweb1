@@ -14,6 +14,16 @@
         </div>
     @endif
 
+    @if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
+
     <form action="{{ route('admin.products.store') }}" method="POST">
         @csrf
         <div class="row">
@@ -21,12 +31,18 @@
 
                 <div class="mb-3">
                     <label class="form-label">Tên sản phẩm</label>
-                    <input type="text" name="productname" class="form-control" value="{{ old('productname') }}" required>
+                    <input type="text" name="productname" class="form-control" value="{{ old('productname') }}">
+                    @error('productname')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label"> Slug </label>
-                    <input type="text" name="slug" class="form-control" value="{{ old('slug') }}" required>
+                    <input type="text" name="slug" class="form-control" value="{{ old('slug') }}">
+                    @error('slug')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
@@ -40,15 +56,16 @@
                                 {{ $category->catename }}
                             </option>
                         @endforeach
-
                     </select>
+                    @error('cateid')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Thương hiệu</label>
                     <select name="brandid" class="form-select">
                         <option value="">-- Chọn thương hiệu --</option>
-
                         @foreach($brands as $brand)
                             <option
                                 value="{{ $brand->id }}"
@@ -56,23 +73,30 @@
                                 {{ $brand->brandname }}
                             </option>
                         @endforeach
-
                     </select>
+                    @error('brandid')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
             </div>
 
 
             <div class="col-md-6">
-
                 <div class="mb-3">
                     <label class="form-label"> Giá </label>
-                    <input type="number" name="price" class="form-control" value="{{ old('price') }}" required>
+                    <input type="number" name="price" class="form-control" value="{{ old('price') }}">
+                    @error('price')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Giá khuyến mãi</label>
                     <input type="number" name="pricediscount" class="form-control" value="{{ old('pricediscount',0) }}">
+                    @error('pricediscount')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
@@ -83,18 +107,24 @@
 
                     <input type="radio" class="btn-check" name="status" id="inactive" value="0" {{ old('status',1)==0 ? 'checked' : '' }}>
                     <label class="btn btn-outline-danger"for="inactive"> Ẩn </label>
+
+                    @error('status')
+                    <span class="text-danger d-block">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label"> Mô tả sản phẩm </label>
                     <textarea name="description" rows="4" class="form-control">{{ old('description') }}</textarea>
+                    @error('description')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
 
             </div>
         </div>
 
         <button type="submit" class="btn btn-primary"> Lưu sản phẩm </button>
-
         <a href="{{ route('admin.products.index') }}"
            class="btn btn-secondary">
             Quay lại

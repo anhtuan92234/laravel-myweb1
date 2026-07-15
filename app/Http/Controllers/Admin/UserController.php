@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\Admin\UserRequest;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -41,23 +42,9 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        try{
-            $request->validate([
-                'fullname' => 'required|string|max:255',
-                'username' => 'required|string|max:255|unique:users,username',
-                'email'    => 'required|email|unique:users,email',
-                'password' => 'required|min:6',
-            ], [
-                'fullname.required' => 'Vui lòng nhập họ và tên!',
-                'username.unique'   => 'Tên tài khoản này đã tồn tại!',
-                'email.required'    => 'Vui lòng nhập địa chỉ email!',
-                'email.unique'      => 'Email này đã được sử dụng!',
-                'password.required' => 'Vui lòng nhập mật khẩu!',
-                'password.min'      => 'Mật khẩu phải chứa ít nhất 6 ký tự!',
-            ]);
-            
+        try{ 
             User::create([
                 'fullname' => $request->fullname,
                 'username' => $request->username,
@@ -104,15 +91,9 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
         try {
-            $request->validate([
-                'fullname' => 'required|max:255',
-                'username' => 'required|max:255|unique:users,username,' . $id,
-                'email'    => 'required|email|unique:users,email,' . $id,
-            ]);
-            
             $user = User::find($id);
             
             if(!$user){
